@@ -22,15 +22,19 @@ defmodule Hearty.ShapeServer do
         {
           shape,
           %{type: "Polygon", coordinates: [Enum.map(hd(shape.points), fn(%{x: x, y: y}) -> {x,y} end)]},
+          %{type: "Polygon", coordinates: [[{shape.bbox.xmin,shape.bbox.ymin},{shape.bbox.xmin,shape.bbox.ymax},{shape.bbox.xmax,shape.bbox.ymax}, {shape.bbox.xmax,shape.bbox.ymin}]]},
           dbf
         }
       end)
-      |> Enum.filter(fn({_shape, polygon, _dbf}) ->
+      |> Enum.filter(fn({_shape, _, bbox,  _dbf}) ->
+        Topo.contains?(bbox, %{type: "Point", coordinates: {latitude, longitude}})
+      end)
+      |> Enum.filter(fn({_shape, polygon, _bbox, _dbf}) ->
         Topo.contains?(polygon, %{type: "Point", coordinates: {latitude, longitude}})
       end)
 
     case result do 
-      [{_, _, [_, zone]} | _] -> {:reply, zone, state}
+      [{_, _, _, [_, zone]} | _] -> {:reply, zone, state}
       _ -> {:reply, nil, state}
     end
     
