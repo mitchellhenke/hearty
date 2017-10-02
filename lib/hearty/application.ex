@@ -8,11 +8,11 @@ defmodule Hearty.Application do
 
     # Define workers and child supervisors to be supervised
     children = [
+      worker(Hearty.Shapefiles, []),
       # Start the Ecto repository
       supervisor(Hearty.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(HeartyWeb.Endpoint, []),
-      worker(Hearty.Shapefiles, [])
+      supervisor(HeartyWeb.Endpoint, [])
 
       # Start your own worker by calling: Hearty.Worker.start_link(arg1, arg2, arg3)
       # worker(Hearty.Worker, [arg1, arg2, arg3]),
