@@ -7,6 +7,9 @@
 # OS Artifacts
 .DS_Store
 
+# Data directory
+data/
+
 # Generated on crash by the VM
 erl_crash.dump
 
