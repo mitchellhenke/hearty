@@ -14,14 +14,13 @@ defmodule HeartyWeb.Router do
   end
 
   scope "/", HeartyWeb do
-    pipe_through :api # Use the default browser stack
-
+    pipe_through :browser # Use the default browser stack
     get "/", PageController, :index
-    get "/:longitude/:latitude", PageController, :query
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", HeartyWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", HeartyWeb do
+    pipe_through :api
+    get "/:longitude/:latitude", PageController, :query
+  end
 end

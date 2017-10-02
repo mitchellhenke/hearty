@@ -1,11 +1,15 @@
 defmodule Hearty.ShapeServer do
   use GenServer 
 
-  def start_link(shapefile_path, dbf_path) do
-    shp = Exshape.Shp.read(File.stream!(shapefile_path, [], 2048))
-    dbf = Exshape.Dbf.read(File.stream!(dbf_path, [], 2048))
-    zipped = Stream.zip(shp, dbf) |> Enum.to_list
+  def start_link(provider, shapefile_path, dbf_path) do
+
+    zipped = Stream.zip(
+      provider.shapefile(shapefile_path),
+      provider.dbf(dbf_path)
+    ) |> Enum.to_list
+
     IO.puts "Shapefiles parsed..."
+
     GenServer.start_link(__MODULE__, zipped, name: __MODULE__)
   end
 
@@ -40,4 +44,47 @@ defmodule Hearty.ShapeServer do
     
   end
 
+end
+
+defmodule BinaryStream do
+  def new(binary) do
+    Stream.resource(
+      fn -> binary end,
+      fn bin -> 
+        case bin do 
+          :done -> {:halt, binary}
+          _ -> {[binary], :done}
+        end
+      end,
+      fn bin -> binary end
+    )
+  end
+end
+
+defmodule Hearty.LocalShapefileProvider do 
+  def shapefile(path) do
+    Exshape.Shp.read(File.stream!(path, [], 2048))
+  end
+
+  def dbf(path) do 
+    Exshape.Dbf.read(File.stream!(path, [], 2048))  
+  end
+end
+
+defmodule Hearty.RemoteShapefileProvider do 
+  def shapefile(path) do
+    path
+    |> HTTPoison.get!()
+    |> Map.get(:body)
+    |> BinaryStream.new()
+    |> Exshape.Shp.read()
+  end
+
+  def dbf(path) do
+    path
+    |> HTTPoison.get!()
+    |> Map.get(:body)
+    |> BinaryStream.new()
+    |> Exshape.Dbf.read()
+  end
 end

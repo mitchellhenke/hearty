@@ -56,3 +56,10 @@ config :hearty, Hearty.Repo,
   database: "hearty_dev",
   hostname: "localhost",
   pool_size: 10
+
+config :hearty, Hearty.ShapeServer, 
+  provider: Hearty.LocalShapefileProvider,
+  shapefile: "data/ophz.shp",
+  dbf: "data/ophz.dbf"
+
+

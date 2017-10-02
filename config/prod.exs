@@ -21,6 +21,13 @@ config :hearty, HeartyWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+# Use the remote provider to fetch
+# the shapefile and dbf from github on boot
+config :hearty, Hearty.ShapeServer, 
+  provider: Hearty.RemoteShapefileProvider,
+  shapefile: "https://raw.githubusercontent.com/kgjenkins/ophz/master/shp/ophz.shp",
+  dbf: "https://raw.githubusercontent.com/kgjenkins/ophz/master/shp/ophz.dbf"
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

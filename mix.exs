@@ -42,7 +42,8 @@ defmodule Hearty.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:exshape, "~> 0.2.5"},
-      {:topo, "~> 0.1.0"}
+      {:topo, "~> 0.1.0"},
+      {:httpoison, "~> 0.13.0"}
     ]
   end
 
