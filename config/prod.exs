@@ -23,8 +23,8 @@ config :logger, level: :info
 
 # Use the remote provider to fetch
 # the shapefile and dbf from github on boot
-config :hearty, Hearty.ShapeServer, 
-  provider: Hearty.RemoteShapefileProvider,
+config :hearty, Hearty.Shapefiles, 
+  provider: Hearty.Shapefiles.Providers.Remote,
   shapefile: "https://raw.githubusercontent.com/kgjenkins/ophz/master/shp/ophz.shp",
   dbf: "https://raw.githubusercontent.com/kgjenkins/ophz/master/shp/ophz.dbf"
 

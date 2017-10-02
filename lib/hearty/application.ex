@@ -6,20 +6,14 @@ defmodule Hearty.Application do
   def start(_type, _args) do
     import Supervisor.Spec
 
-    shapeurl = "https://raw.githubusercontent.com/kgjenkins/ophz/master/shp/ophz.shp"
-    dbfurl = "https://raw.githubusercontent.com/kgjenkins/ophz/master/shp/ophz.dbf"
-
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
       supervisor(Hearty.Repo, []),
       # Start the endpoint when the application starts
       supervisor(HeartyWeb.Endpoint, []),
-      worker(Hearty.ShapeServer, [
-        Application.get_env(:hearty, Hearty.ShapeServer)[:provider],
-        Application.get_env(:hearty, Hearty.ShapeServer)[:shapefile],
-        Application.get_env(:hearty, Hearty.ShapeServer)[:dbf],
-      ])
+      worker(Hearty.Shapefiles, [])
+
       # Start your own worker by calling: Hearty.Worker.start_link(arg1, arg2, arg3)
       # worker(Hearty.Worker, [arg1, arg2, arg3]),
     ]

@@ -57,8 +57,8 @@ config :hearty, Hearty.Repo,
   hostname: "localhost",
   pool_size: 10
 
-config :hearty, Hearty.ShapeServer, 
-  provider: Hearty.LocalShapefileProvider,
+config :hearty, Hearty.Shapefiles, 
+  provider: Hearty.Shapefiles.Providers.Local,
   shapefile: "data/ophz.shp",
   dbf: "data/ophz.dbf"
 

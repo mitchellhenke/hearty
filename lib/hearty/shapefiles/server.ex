@@ -1,4 +1,4 @@
-defmodule Hearty.ShapeServer do
+defmodule Hearty.Shapefiles.Server do
   use GenServer 
 
   def start_link(provider, shapefile_path, dbf_path) do
@@ -46,45 +46,7 @@ defmodule Hearty.ShapeServer do
 
 end
 
-defmodule BinaryStream do
-  def new(binary) do
-    Stream.resource(
-      fn -> binary end,
-      fn bin -> 
-        case bin do 
-          :done -> {:halt, binary}
-          _ -> {[binary], :done}
-        end
-      end,
-      fn bin -> binary end
-    )
-  end
-end
 
-defmodule Hearty.LocalShapefileProvider do 
-  def shapefile(path) do
-    Exshape.Shp.read(File.stream!(path, [], 2048))
-  end
 
-  def dbf(path) do 
-    Exshape.Dbf.read(File.stream!(path, [], 2048))  
-  end
-end
 
-defmodule Hearty.RemoteShapefileProvider do 
-  def shapefile(path) do
-    path
-    |> HTTPoison.get!()
-    |> Map.get(:body)
-    |> BinaryStream.new()
-    |> Exshape.Shp.read()
-  end
 
-  def dbf(path) do
-    path
-    |> HTTPoison.get!()
-    |> Map.get(:body)
-    |> BinaryStream.new()
-    |> Exshape.Dbf.read()
-  end
-end

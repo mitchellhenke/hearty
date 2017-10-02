@@ -9,7 +9,7 @@ defmodule HeartyWeb.PageController do
     {lat, _} = Float.parse(latitude)
     {lng, _} = Float.parse(longitude)
     json(conn, %{
-      zone: Hearty.ShapeServer.query(lat, lng),
+      zone: Hearty.Shapefiles.query(lat, lng),
       latitude: lat,
       longitude: lng
     })
