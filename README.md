@@ -1,6 +1,6 @@
 # Hearty
 
-An API for getting the heartiness zone of a latitude and longitude point.
+An API for getting the hardiness zone of a latitude and longitude point.
 
 ### Getting Started
 
