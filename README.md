@@ -1,20 +1,30 @@
 # Hearty
 
-To start your Phoenix server:
+An API for getting the heartiness zone of a latitude and longitude point.
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
+### Getting Started
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+```
+git clone https://github.com/nickgartmann/hearty.git
+cd hearty
+mix do deps.get, deps.compile
+mix fetch_shapefiles # Fetches the latest shapefiles from https://github.com/kgjenkins/ophz
+mix phx.server
+```
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+### API
 
-## Learn more
+```
+GET /api/:latitude/:longitude
+```
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+```
+GET /api/43.0389/-87.9065
+
+{
+  "zone": "5b",
+  "longitude": 43.0389,
+  "latitude": -87.9065
+}
+```
+

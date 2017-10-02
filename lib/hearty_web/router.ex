@@ -21,6 +21,6 @@ defmodule HeartyWeb.Router do
   # Other scopes may use custom stacks.
   scope "/api", HeartyWeb do
     pipe_through :api
-    get "/:longitude/:latitude", PageController, :query
+    get "/:latitude/:longitude", PageController, :query
   end
 end
