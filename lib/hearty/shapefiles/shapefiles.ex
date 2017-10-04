@@ -12,10 +12,10 @@ defmodule Hearty.Shapefiles do
 
   def query(latitude, longitude) do
     Shapefiles.Server.get()
-    |> Enum.filter(fn({shape, _dbf}) -> 
+    |> Stream.filter(fn({shape, _dbf}) ->
       Map.has_key?(shape, :points)
     end)
-    |> Enum.map(fn({shape, dbf}) -> 
+    |> Stream.map(fn({shape, dbf}) ->
       {
         shape,
         %{type: "Polygon", coordinates: [Enum.map(hd(shape.points), fn(%{x: x, y: y}) -> {x,y} end)]},
@@ -23,12 +23,13 @@ defmodule Hearty.Shapefiles do
         dbf
       }
     end)
-    |> Enum.filter(fn({_shape, _, bbox,  _dbf}) ->
+    |> Stream.filter(fn({_shape, _, bbox,  _dbf}) ->
       Topo.contains?(bbox, %{type: "Point", coordinates: {latitude, longitude}})
     end)
-    |> Enum.filter(fn({_shape, polygon, _bbox, _dbf}) ->
+    |> Stream.filter(fn({_shape, polygon, _bbox, _dbf}) ->
       Topo.contains?(polygon, %{type: "Point", coordinates: {latitude, longitude}})
     end)
+    |> Enum.take(1)
     |> case do 
       [{_, _, _, [_, zone]} | _] -> zone
       _ -> nil
